@@ -1,0 +1,324 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <script>
+      if (!localStorage.getItem("token") || !localStorage.getItem("isLoggedIn")) {
+        window.location.href = "login.html";
+      }
+    </script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Order & Income | LogiSir Dashboard</title>
+    <!-- Google Fonts -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <!-- Font Awesome -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="dashboard.css" />
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <style>
+        /* Special Effects for this page */
+        .congrats-card {
+            background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+            color: white;
+            border-radius: 16px;
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 15px -3px rgba(79, 70, 229, 0.4);
+        }
+        .congrats-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -10%;
+            width: 300px;
+            height: 300px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+        }
+        .congrats-card::after {
+            content: '🏆';
+            position: absolute;
+            bottom: 10px;
+            right: 20px;
+            font-size: 8rem;
+            opacity: 0.2;
+            transform: rotate(15deg);
+        }
+        
+        .glass-card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            border-radius: 12px;
+            padding: 1.5rem;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .glass-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            border-color: #4f46e5;
+        }
+
+        .special-card {
+            position: relative;
+            z-index: 1;
+            overflow: hidden;
+            color: white;
+        }
+        .special-card-1 { background: linear-gradient(45deg, #FF512F 0%, #DD2476 100%); }
+        .special-card-2 { background: linear-gradient(45deg, #11998e 0%, #38ef7d 100%); }
+        .special-card-3 { background: linear-gradient(45deg, #FC466B 0%, #3F5EFB 100%); }
+        
+        .metric-value { font-size: 1.8rem; font-weight: 700; margin: 0.5rem 0; }
+        .metric-label { font-size: 0.875rem; opacity: 0.9; }
+
+        .chart-section {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+            height: 100%;
+        }
+    </style>
+  </head>
+  <body>
+    <div class="dashboard-container">
+      <!-- Sidebar -->
+      <aside class="sidebar">
+        <div class="logo">
+          <i class="fa-solid fa-truck-fast"></i>
+          <span>LogiSir</span>
+        </div>
+        <nav class="nav-menu">
+          <ul>
+            <li><a href="dashboard.html"><i class="fa-solid fa-house"></i><span>Dashboard</span></a></li>
+            <li><a href="kyc.html"><i class="fa-solid fa-id-card"></i><span>KYC Verification</span></a></li>
+            <li><a href="orders.html"><i class="fa-solid fa-clipboard-list"></i><span>Orders</span></a></li>
+            <li><a href="fleet.html"><i class="fa-solid fa-truck-moving"></i><span>Fleet</span></a></li>
+            <li><a href="inventory.html"><i class="fa-solid fa-warehouse"></i><span>Inventory</span></a></li>
+            <li class="active">
+                <a href="income.html">
+                  <i class="fa-solid fa-sack-dollar"></i>
+                  <span>Order & Income</span>
+                </a>
+            </li>
+            <li>
+                <a href="reports.html">
+                  <i class="fa-solid fa-chart-pie"></i>
+                  <span>Reports</span>
+                </a>
+            </li>
+            <li>
+                <a href="invoices.html">
+                  <i class="fa-solid fa-file-invoice"></i>
+                  <span>Invoices</span>
+                </a>
+            </li>
+            <li><a href="create-shipment.html"><i class="fa-solid fa-plus-circle"></i><span>Create Shipment</span></a></li>
+            <li><a href="customers.html"><i class="fa-solid fa-users"></i><span>Customers</span></a></li>
+            <li><a href="analytics.html"><i class="fa-solid fa-chart-line"></i><span>Analytics</span></a></li>
+            <li><a href="wallet.html"><i class="fa-solid fa-wallet"></i><span>Wallet</span></a></li>
+            <li><a href="settings.html"><i class="fa-solid fa-gear"></i><span>Settings</span></a></li>
+          </ul>
+        </nav>
+        <div class="logout-section">
+          <a href="#"><i class="fa-solid fa-right-from-bracket"></i><span>Logout</span></a>
+        </div>
+      </aside>
+
+      <!-- Main Content -->
+      <main class="main-content">
+        <!-- Header -->
+        <header class="top-bar">
+          <div class="toggle-btn" id="sidebar-toggle"><i class="fa-solid fa-bars"></i></div>
+          <div class="search-bar">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" placeholder="Search..." />
+          </div>
+          <div class="user-profile">
+            <div class="profile-info">
+              <img src="https://ui-avatars.com/api/?name=Admin+User&background=0D8ABC&color=fff" alt="User" />
+              <div class="text">
+                <h4>Alex Morgan</h4>
+                <p>Admin</p>
+              </div>
+            </div>
+          </div>
+        </header>
+
+        <!-- Content -->
+        <div class="content-wrapper">
+            
+            <!-- Global Stats Header -->
+            <div class="section-header" style="justify-content: space-between; display:flex; align-items: flex-end; margin-bottom: 2rem;">
+              <div>
+                   <h2 style="font-size: 1.8rem; font-weight: 700; color: var(--text-primary);">Order & Income</h2>
+                   <p style="color: var(--text-secondary); font-size: 0.9rem;">Track your financial performance.</p>
+              </div>
+              <div style="display: flex; gap: 2rem;">
+                   <div class="global-stat">
+                       <div class="icon"><i class="fa-solid fa-truck-ramp-box" style="color: #2563eb;"></i></div>
+                       <div>
+                           <h3 style="font-size: 1.2rem; font-weight: 700;">₹0 <i class="fa-solid fa-minus" style="font-size: 0.8rem; color: #9ca3af;"></i></h3>
+                           <p style="font-size: 0.8rem; color: var(--text-secondary);">Overall Imports</p>
+                       </div>
+                   </div>
+                   <div class="global-stat">
+                       <div class="icon"><i class="fa-solid fa-plane-departure" style="color: #2563eb;"></i></div>
+                       <div>
+                           <h3 style="font-size: 1.2rem; font-weight: 700;">₹0 <i class="fa-solid fa-minus" style="font-size: 0.8rem; color: #9ca3af;"></i></h3>
+                           <p style="font-size: 0.8rem; color: var(--text-secondary);">Overall Exports</p>
+                       </div>
+                   </div>
+              </div>
+            </div>
+            
+            <!-- Congratulation Banner -->
+            <div class="congrats-card">
+                <h1 style="font-size: 1.8rem; margin-bottom: 0.5rem;">Congratulations <span id="congratsName">User</span>! 🎉</h1>
+                <p style="font-size: 1.1rem; opacity: 0.9;">You are the <strong>Best Seller of the Month</strong>. You have achieved 158% more sales compared to last month. Keep up the great work!</p>
+                <button class="btn-primary" style="margin-top: 1rem; background: white; color: #4f46e5; border: none;">View Badge</button>
+            </div>
+
+            <!-- Metrics Grid (6 Items) -->
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1.5rem; margin-bottom: 2rem;">
+                <div class="glass-card">
+                    <div style="color: #4f46e5; margin-bottom: 0.5rem;"><i class="fa-solid fa-bag-shopping fa-lg"></i></div>
+                    <div class="metric-value" id="statItemsSold">0</div>
+                    <div class="metric-label">Items Sold</div>
+                </div>
+                <!-- Downloads -->
+                <div class="glass-card">
+                    <div style="color: #10b981; margin-bottom: 0.5rem;"><i class="fa-solid fa-download fa-lg"></i></div>
+                    <div class="metric-value" id="statDownloads">0</div>
+                    <div class="metric-label">Downloads</div>
+                </div>
+                <!-- Documents -->
+                <div class="glass-card">
+                    <div style="color: #f59e0b; margin-bottom: 0.5rem;"><i class="fa-solid fa-file-contract fa-lg"></i></div>
+                    <div class="metric-value" id="statDocuments">0</div>
+                    <div class="metric-label">Documents</div>
+                </div>
+                <!-- New Orders -->
+                <div class="glass-card">
+                    <div style="color: #ef4444; margin-bottom: 0.5rem;"><i class="fa-solid fa-cart-plus fa-lg"></i></div>
+                    <div class="metric-value" id="statNewOrders">0</div>
+                    <div class="metric-label">New Orders</div>
+                </div>
+                <!-- Products -->
+                <div class="glass-card">
+                    <div style="color: #8b5cf6; margin-bottom: 0.5rem;"><i class="fa-solid fa-box-open fa-lg"></i></div>
+                    <div class="metric-value" id="statProducts">0</div>
+                    <div class="metric-label">Active Products</div>
+                </div>
+                <!-- Invoices -->
+                <div class="glass-card">
+                    <div style="color: #ec4899; margin-bottom: 0.5rem;"><i class="fa-solid fa-file-invoice-dollar fa-lg"></i></div>
+                    <div class="metric-value" id="statInvoices">0</div>
+                    <div class="metric-label">Invoices Sent</div>
+                </div>
+            </div>
+
+            <!-- Special Effects Cards (3 Items) -->
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-bottom: 2rem;">
+                <div class="glass-card special-card special-card-1">
+                    <h3>Products</h3>
+                    <div class="metric-value" id="specialProducts">0</div>
+                    <p class="metric-label">Top Rated Items</p>
+                    <i class="fa-solid fa-star" style="position: absolute; bottom: -10px; right: 10px; font-size: 5rem; opacity: 0.2; transform: rotate(-10deg);"></i>
+                </div>
+                 <div class="glass-card special-card special-card-2">
+                    <h3>Orders</h3>
+                    <div class="metric-value" id="specialOrders">0</div>
+                    <p class="metric-label">Completed This Week</p>
+                    <i class="fa-solid fa-check-circle" style="position: absolute; bottom: -10px; right: 10px; font-size: 5rem; opacity: 0.2;"></i>
+                </div>
+                 <div class="glass-card special-card special-card-3">
+                    <h3>Reviews</h3>
+                    <div class="metric-value" id="specialReviews">0</div>
+                    <p class="metric-label">Positive Feedback</p>
+                    <i class="fa-solid fa-thumbs-up" style="position: absolute; bottom: -10px; right: 10px; font-size: 5rem; opacity: 0.2; transform: rotate(10deg);"></i>
+                </div>
+            </div>
+
+            <!-- Charts Section 1 -->
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 1.5rem; margin-bottom: 2rem;">
+                <!-- Sales Current Month -->
+                <div class="chart-section">
+                    <div style="display:flex; justify-content:space-between; align-items:center;">
+                        <h3>Sales Current Month</h3>
+                        <span style="color:#10b981; font-weight:600;">0%</span>
+                    </div>
+                    <canvas id="salesMonthChart"></canvas>
+                </div>
+                <!-- Overall Revenue -->
+                 <div class="chart-section">
+                    <div style="display:flex; justify-content:space-between; align-items:center;">
+                        <h3>Overall Revenue</h3>
+                        <span style="color:#4f46e5; font-weight:600;">₹0</span>
+                    </div>
+                    <canvas id="revenueChart"></canvas>
+                </div>
+            </div>
+
+             <!-- Charts Section 2 -->
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; margin-bottom: 2rem;">
+                <!-- Generated Leads -->
+                 <div class="chart-section">
+                    <h3>Generated Leads Weekly</h3>
+                     <p style="font-size:0.8rem; color:#6b7280; margin-bottom:1rem;">Potential customers from campaigns</p>
+                    <canvas id="leadsChart"></canvas>
+                </div>
+                <!-- Weekly Income -->
+                 <div class="chart-section">
+                    <h3>Weekly Income</h3>
+                    <p style="font-size:0.8rem; color:#6b7280; margin-bottom:1rem;">Net profit after deductions</p>
+                    <canvas id="incomeChart"></canvas>
+                </div>
+                 <!-- Order Channels -->
+                 <div class="chart-section">
+                    <h3>Orders Channels</h3>
+                    <p style="font-size:0.8rem; color:#6b7280; margin-bottom:1rem;">Source of incoming orders</p>
+                    <div style="height: 250px; display: flex; justify-content: center;">
+                        <canvas id="channelsChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Transaction Table -->
+             <div class="chart-section" style="margin-bottom: 2rem;">
+                 <h3>Recent Transactions</h3>
+                 <div class="table-responsive" style="margin-top: 1rem;">
+                     <table id="transactionsTable">
+                         <thead>
+                             <tr>
+                                 <th>Transaction ID</th>
+                                 <th>Date</th>
+                                 <th>Customer</th>
+                                 <th>Amount</th>
+                                 <th>Status</th>
+                             </tr>
+                         </thead>
+                         <tbody></tbody>
+                     </table>
+                 </div>
+             </div>
+
+        </div>
+      </main>
+    </div>
+    <script src="dashboard.js"></script>
+  </body>
+</html>
+

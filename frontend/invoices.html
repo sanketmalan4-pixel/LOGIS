@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <script>
+      if (!localStorage.getItem("token") || !localStorage.getItem("isLoggedIn")) {
+        window.location.href = "login.html";
+      }
+    </script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Invoices | LogiSir Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link rel="stylesheet" href="dashboard.css" />
+    <style>
+        .invoice-stats {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; margin-bottom: 2rem;
+        }
+        .stat-box {
+            background: white; padding: 1.5rem; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+            display: flex; align-items: center; justify-content: space-between;
+        }
+        .stat-icon {
+            width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.25rem;
+        }
+    </style>
+  </head>
+  <body>
+    <div class="dashboard-container">
+      <aside class="sidebar">
+        <div class="logo"><i class="fa-solid fa-truck-fast"></i><span>LogiSir</span></div>
+        <nav class="nav-menu">
+            <!-- Sidebar will be injected/updated dynamically or manually matched -->
+            <ul>
+                <li><a href="dashboard.html"><i class="fa-solid fa-house"></i><span>Dashboard</span></a></li>
+                <li><a href="kyc.html"><i class="fa-solid fa-id-card"></i><span>KYC Verification</span></a></li>
+                <li><a href="orders.html"><i class="fa-solid fa-clipboard-list"></i><span>Orders</span></a></li>
+                <li><a href="fleet.html"><i class="fa-solid fa-truck-moving"></i><span>Fleet</span></a></li>
+                <li><a href="inventory.html"><i class="fa-solid fa-warehouse"></i><span>Inventory</span></a></li>
+                <li><a href="income.html"><i class="fa-solid fa-sack-dollar"></i><span>Order & Income</span></a></li>
+                <li><a href="reports.html"><i class="fa-solid fa-chart-pie"></i><span>Reports</span></a></li>
+                <li class="active"><a href="invoices.html"><i class="fa-solid fa-file-invoice"></i><span>Invoices</span></a></li>
+                <li><a href="create-shipment.html"><i class="fa-solid fa-plus-circle"></i><span>Create Shipment</span></a></li>
+                <li><a href="customers.html"><i class="fa-solid fa-users"></i><span>Customers</span></a></li>
+                <li><a href="analytics.html"><i class="fa-solid fa-chart-line"></i><span>Analytics</span></a></li>
+                <li><a href="wallet.html"><i class="fa-solid fa-wallet"></i><span>Wallet</span></a></li>
+                <li><a href="settings.html"><i class="fa-solid fa-gear"></i><span>Settings</span></a></li>
+            </ul>
+        </nav>
+        <div class="logout-section"><a href="#"><i class="fa-solid fa-right-from-bracket"></i><span>Logout</span></a></div>
+      </aside>
+
+      <main class="main-content">
+        <header class="top-bar">
+          <div class="toggle-btn" id="sidebar-toggle"><i class="fa-solid fa-bars"></i></div>
+          <div class="search-bar"><i class="fa-solid fa-magnifying-glass"></i><input type="text" placeholder="Search invoices..." /></div>
+          <div class="user-profile">
+            <div class="profile-info"><img src="https://ui-avatars.com/api/?name=Admin+User&background=0D8ABC&color=fff" alt="User" /><div class="text"><h4>Alex Morgan</h4><p>Admin</p></div></div>
+          </div>
+        </header>
+
+        <div class="content-wrapper">
+             <div class="section-header" style="justify-content: space-between; display: flex;">
+                <div>
+                    <h2>Invoices</h2>
+                    <p>Manage and track your client billing</p>
+                </div>
+                <div style="display: flex; gap: 1rem; align-items: center;">
+                     <div class="global-stat">
+                          <div class="icon"><i class="fa-solid fa-truck-ramp-box" style="color: #2563eb;"></i></div>
+                          <div>
+                              <h3 style="font-size: 1.2rem; font-weight: 700;">₹0 <i class="fa-solid fa-minus" style="font-size: 0.8rem; color: #9ca3af;"></i></h3>
+                              <p style="font-size: 0.8rem; color: var(--text-secondary);">Overall Imports</p>
+                          </div>
+                     </div>
+                     <div class="global-stat">
+                          <div class="icon"><i class="fa-solid fa-plane-departure" style="color: #2563eb;"></i></div>
+                          <div>
+                              <h3 style="font-size: 1.2rem; font-weight: 700;">₹0 <i class="fa-solid fa-minus" style="font-size: 0.8rem; color: #9ca3af;"></i></h3>
+                              <p style="font-size: 0.8rem; color: var(--text-secondary);">Overall Exports</p>
+                          </div>
+                     </div>
+                     <a href="create-invoice.html" class="btn-primary"><i class="fa-solid fa-plus"></i> Create New Invoice</a>
+                </div>
+            </div>
+
+            <!-- Stats -->
+            <div class="invoice-stats">
+                <div class="stat-box">
+                    <div><p style="color:#6b7280; font-size:0.9rem;">Total Invoiced</p><h3 style="font-size:1.5rem; font-weight:700;" id="invTotalAmount">₹0.00</h3></div>
+                    <div class="stat-icon" style="background:#e0e7ff; color:#4f46e5;"><i class="fa-solid fa-file-invoice-dollar"></i></div>
+                </div>
+                 <div class="stat-box">
+                    <div><p style="color:#6b7280; font-size:0.9rem;">Paid</p><h3 style="font-size:1.5rem; font-weight:700;" id="invPaidAmount">₹0.00</h3></div>
+                    <div class="stat-icon" style="background:#dcfce7; color:#16a34a;"><i class="fa-solid fa-check-circle"></i></div>
+                </div>
+                 <div class="stat-box">
+                    <div><p style="color:#6b7280; font-size:0.9rem;">Pending</p><h3 style="font-size:1.5rem; font-weight:700;" id="invPendingAmount">₹0.00</h3></div>
+                    <div class="stat-icon" style="background:#fef3c7; color:#d97706;"><i class="fa-solid fa-clock"></i></div>
+                </div>
+                 <div class="stat-box">
+                    <div><p style="color:#6b7280; font-size:0.9rem;">Overdue</p><h3 style="font-size:1.5rem; font-weight:700;" id="invOverdueAmount">₹0.00</h3></div>
+                    <div class="stat-icon" style="background:#fee2e2; color:#dc2626;"><i class="fa-solid fa-circle-exclamation"></i></div>
+                </div>
+            </div>
+
+            <!-- Table -->
+            <div class="recent-shipments" style="background: white; padding: 1.5rem; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);">
+                <div class="table-responsive">
+                    <table id="invoiceTable">
+                        <thead>
+                            <tr>
+                                <th>Invoice ID</th>
+                                <th>Client</th>
+                                <th>Date</th>
+                                <th>Due Date</th>
+                                <th>Amount</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+      </main>
+    </div>
+    <script src="dashboard.js"></script>
+  </body>
+</html>
+

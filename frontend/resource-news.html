@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>News & Announcements | LogiSir India</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+    <style>
+        .news-hero {
+            background: linear-gradient(rgba(15, 23, 42, 0.9), rgba(15, 23, 42, 0.9)), url('https://images.unsplash.com/photo-1504711434969-e33886168f5c?q=80&w=2000&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+            height: 40vh;
+            display: flex;
+            align-items: center;
+            color: white;
+            margin-top: 80px;
+        }
+
+        .featured-news {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 30px;
+            margin-bottom: 80px;
+        }
+
+        .news-card-big {
+            position: relative;
+            border-radius: 30px;
+            overflow: hidden;
+            height: 500px;
+            background: #000;
+        }
+
+        .news-card-big img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.6;
+            transition: transform 0.5s ease;
+        }
+
+        .news-card-big:hover img {
+            transform: scale(1.05);
+        }
+
+        .news-content-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            padding: 50px;
+            color: white;
+            background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);
+            width: 100%;
+        }
+
+        .news-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+        }
+
+        .news-card {
+            background: white;
+            border-radius: 24px;
+            overflow: hidden;
+            border: 1px solid #e2e8f0;
+            transition: all 0.3s ease;
+        }
+
+        .news-card:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--primary);
+        }
+
+        .news-img {
+            height: 200px;
+            overflow: hidden;
+        }
+
+        .news-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .news-body {
+            padding: 30px;
+        }
+
+        .press-kit {
+            background: #f8fafc;
+            padding: 80px 0;
+            margin-top: 100px;
+            border-radius: 40px;
+        }
+
+        .pk-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin-top: 40px;
+        }
+
+        .pk-item {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            border: 1px solid #e2e8f0;
+        }
+    </style>
+</head>
+<body>
+    <header id="header" class="scrolled">
+        <div class="container">
+            <nav class="navbar">
+                <a href="index.html" class="logo">LogiSir<span class="dot">.</span></a>
+                <ul class="nav-links">
+                    <li class="dropdown">
+                        <a href="javascript:void(0)" class="nav-item">Markets <i class="ri-arrow-down-s-line"></i></a>
+                        <div class="dropdown-menu">
+                            <a href="market-ecommerce.html">E-Commerce</a>
+                            <a href="market-pharma.html">Pharma</a>
+                            <a href="market-automotive.html">Automotive</a>
+                            <a href="market-fmcg.html">FMCG & Retail</a>
+                            <a href="market-manufacturing.html">Manufacturing</a>
+                            <a href="market-agriculture.html">Agriculture</a>
+                        </div>
+                    </li>
+                    <li class="dropdown">
+                        <a href="javascript:void(0)" class="nav-item">Solutions <i class="ri-arrow-down-s-line"></i></a>
+                        <div class="dropdown-menu">
+                            <a href="solution-order-management.html">Order Management - Penom</a>
+                            <a href="solution-distribution.html">Distribution & Fulfillment</a>
+                            <a href="solution-transportation.html">Transportation</a>
+                            <a href="solution-customs.html">Customs Brokerage</a>
+                        </div>
+                    </li>
+                    <li class="dropdown">
+                        <a href="javascript:void(0)" class="nav-item">About Us <i class="ri-arrow-down-s-line"></i></a>
+                        <div class="dropdown-menu">
+                            <a href="company-overview.html">Company Overview</a>
+                            <a href="management-team.html">Management Team</a>
+                            <a href="locations.html">Locations</a>
+                        </div>
+                    </li>
+                    <li class="dropdown">
+                        <a href="javascript:void(0)" class="nav-item">Responsibilities <i class="ri-arrow-down-s-line"></i></a>
+                        <div class="dropdown-menu">
+                            <a href="responsibility-sustainability.html">Environment Sustainability</a>
+                            <a href="responsibility-csr.html">Corporate Social Responsibility</a>
+                        </div>
+                    </li>
+                    <li class="dropdown">
+                        <a href="javascript:void(0)" class="nav-item active">Resources <i class="ri-arrow-down-s-line"></i></a>
+                        <div class="dropdown-menu">
+                            <a href="resource-news.html">News & Announcements</a>
+                            <a href="resource-insights.html">Insights</a>
+                            <a href="resource-testimonials.html">Testimonials</a>
+                            <a href="resource-api.html">API Marketplace</a>
+                        </div>
+                    </li>
+                    <li><a href="careers.html" class="nav-item">Careers</a></li>
+                    <li><a href="contact.html" class="nav-item">Contact Us</a></li>
+                </ul>
+                <div class="nav-actions">
+                    <a href="contact.html" class="btn btn-primary">Subscribe to PR</a>
+                    <button class="menu-toggle"><i class="ri-menu-4-line"></i></button>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <section class="news-hero">
+        <div class="container">
+            <h1 class="fade-in-up" style="font-size: 3rem;">Newsroom</h1>
+            <p class="fade-in-up delay-1" style="opacity: 0.8;">Defining the narrative of Indian logistics.</p>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="container">
+            <div class="featured-news">
+                <div class="news-card-big">
+                    <img src="https://images.unsplash.com/photo-1586528116311-ad86d704d98f?q=80&w=1000&auto=format&fit=crop" alt="Award">
+                    <div class="news-content-overlay">
+                        <span class="badge" style="background: var(--accent); color: var(--primary);">Breaking</span>
+                        <h2 style="font-size: 2.5rem; margin: 15px 0;">LogiSir named 'Supply Chain Disrupter of the Year' 2025</h2>
+                        <p style="opacity: 0.9; max-width: 600px;">Internalizing tech and prioritizing driver welfare has earned LogiSir the highest industry honor at the Mumbai Logistics Summit.</p>
+                        <a href="#" class="btn btn-primary" style="margin-top: 20px;">Full Story</a>
+                    </div>
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 20px;">
+                    <div class="news-card" style="display: flex; height: 180px;">
+                        <img src="data:image/jpeg;base64,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" style="width: 150px; object-fit: cover;">
+                        <div style="padding: 20px;">
+                            <span style="font-size: 0.75rem; color: var(--accent); font-weight: 700;">EXPANSION</span>
+                            <h4 style="margin-top: 5px;">New Tech Hub in Pune</h4>
+                            <p style="font-size: 0.85rem; color: var(--text-muted);">Hiring 200+ AI engineers.</p>
+                        </div>
+                    </div>
+                    <div class="news-card" style="display: flex; height: 180px;">
+                        <img src="https://images.unsplash.com/photo-1512428559087-560fa5ceab42?q=80&w=400&auto=format&fit=crop" style="width: 150px; object-fit: cover;">
+                        <div style="padding: 20px;">
+                            <span style="font-size: 0.75rem; color: var(--accent); font-weight: 700;">PRODUCT</span>
+                            <h4 style="margin-top: 5px;">Penom 2.0 Go-Live</h4>
+                            <p style="font-size: 0.85rem; color: var(--text-muted);">Enhanced predictive routing.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="news-grid">
+                <div class="news-card">
+                    <div class="news-img"><img src="https://img.baba-blog.com/2024/04/image6-64.jpeg?x-oss-process=style%2Ffull"></div>
+                    <div class="news-body">
+                        <span style="font-size: 0.75rem; color: var(--text-muted);">JAN 10, 2026</span>
+                        <h3 style="margin: 10px 0;">Surge in Cross-Border E-com</h3>
+                        <p style="font-size: 0.9rem;">How our customs edge is doubling international volumes.</p>
+                    </div>
+                </div>
+                <div class="news-card">
+                    <div class="news-img"><img src="https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?q=80&w=600&auto=format&fit=crop"></div>
+                    <div class="news-body">
+                        <span style="font-size: 0.75rem; color: var(--text-muted);">JAN 05, 2026</span>
+                        <h3 style="margin: 10px 0;">1 Million Trees Milestone</h3>
+                        <p style="font-size: 0.9rem;">Sustainability initiative hits a major green goal.</p>
+                    </div>
+                </div>
+                <div class="news-card">
+                    <div class="news-img"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS6RdElA218zkkHyvor9XWTb0s0Buu0xC5SCg&s"></div>
+                    <div class="news-body">
+                        <span style="font-size: 0.75rem; color: var(--text-muted);">DEC 20, 2025</span>
+                        <h3 style="margin: 10px 0;">Pharma Cold Chain Expansion</h3>
+                        <p style="font-size: 0.9rem;">New deep-freeze facility operational in Hyderabad.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="press-kit">
+                <div class="container" style="text-align: center;">
+                    <h2>Media & Press Kit</h2>
+                    <p style="color: var(--text-muted); margin-bottom: 40px;">Download official assets and brand guidelines.</p>
+                    <div class="pk-grid">
+                        <div class="pk-item">
+                            <i class="ri-image-line" style="font-size: 2rem; color: var(--primary);"></i>
+                            <h4 style="margin-top: 10px;">Brand Assets</h4>
+                            <p style="font-size: 0.8rem;">Logos & Icons</p>
+                        </div>
+                        <div class="pk-item">
+                            <i class="ri-file-text-line" style="font-size: 2rem; color: var(--primary);"></i>
+                            <h4 style="margin-top: 10px;">Fact Sheet</h4>
+                            <p style="font-size: 0.8rem;">Company Profile</p>
+                        </div>
+                        <div class="pk-item">
+                            <i class="ri-team-line" style="font-size: 2rem; color: var(--primary);"></i>
+                            <h4 style="margin-top: 10px;">Bios</h4>
+                            <p style="font-size: 0.8rem;">Leadership Photos</p>
+                        </div>
+                        <div class="pk-item">
+                            <i class="ri-mail-send-line" style="font-size: 2rem; color: var(--primary);"></i>
+                            <h4 style="margin-top: 10px;">PR Inquiries</h4>
+                            <p style="font-size: 0.8rem;">Contact Media Team</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+      <div class="container footer-content">
+        <!-- Brand & Social -->
+        <div class="footer-brand">
+            <a href="index.html" class="logo">LogiSir<span class="dot">.</span></a>
+            <span class="tagline">Leader in Express</span>
+            <p>LogiSir is here to redefine express services. Speed is the essence of all our services whether through land or air, anywhere in India and the world.</p>
+            
+            <h4 style="color: #0b4fba; font-size: 0.9rem; margin-bottom: 15px; margin-top: 20px;">GET CONNECTED</h4>
+            <div class="social-links">
+                <a href="#"><i class="ri-linkedin-fill"></i></a>
+                <a href="#"><i class="ri-facebook-fill"></i></a>
+                <a href="#"><i class="ri-twitter-x-line"></i></a>
+                <a href="#"><i class="ri-instagram-line"></i></a>
+            </div>
+        </div>
+
+        <!-- Quick Links -->
+        <div class="footer-links">
+          <h4>Quick Links</h4>
+          <ul>
+            <li><a href="company-overview.html">About Us</a></li>
+            <li><a href="service-trucking.html">Express Services</a></li>
+            <li><a href="contact.html">Business Enquiry</a></li>
+            <li><a href="contact.html">Service Grievance</a></li>
+            <li><a href="resource-news.html">Media</a></li>
+            <li><a href="contact.html">Contact Us</a></li>
+            <li><a href="careers.html">Careers</a></li>
+          </ul>
+        </div>
+
+        <!-- Contact Us -->
+        <div class="footer-links">
+          <h4>Contact Us</h4>
+          <ul class="contact-list">
+             <li>
+                 <i class="ri-map-pin-fill"></i>
+                 <span>LogiSir House 69, Institutional<br>Area - Sector - 32<br>Gurugram - 122001, Haryana, India</span>
+             </li>
+             <li>
+                 <i class="ri-phone-fill"></i>
+                 <span>+91-124-238-4090<br>+91-124-238-4094</span>
+             </li>
+             <li>
+                 <i class="ri-mail-fill"></i>
+                 <span>info@logisir.in</span>
+             </li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <div class="container">
+          <p>&copy; 2026 LogiSir Inc. All rights reserved.</p>
+        </div>
+      </div>
+    </footer>
+    <script src="script.js"></script>
+</body>
+</html>
+

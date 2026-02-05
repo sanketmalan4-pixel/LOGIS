@@ -1,0 +1,361 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <script>
+      if (!localStorage.getItem("token") || !localStorage.getItem("isLoggedIn")) {
+        window.location.href = "login.html";
+      }
+    </script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>LogiSir - Logistics Dashboard</title>
+    <!-- Google Fonts -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <!-- Font Awesome -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="dashboard.css" />
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Razorpay -->
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+  </head>
+  <body>
+    <div class="dashboard-container">
+      <!-- Sidebar -->
+      <aside class="sidebar">
+        <div class="logo">
+          <i class="fa-solid fa-truck-fast"></i>
+          <span>LogiSir</span>
+        </div>
+        <nav class="nav-menu">
+          <ul>
+            <li class="active">
+              <a href="dashboard.html">
+                <i class="fa-solid fa-house"></i>
+                <span>Dashboard</span>
+              </a>
+            </li>
+             <li>
+                <a href="orders.html">
+                  <i class="fa-solid fa-clipboard-list"></i>
+                  <span>Orders</span>
+                </a>
+              </li>
+              <li>
+                <a href="fleet.html">
+                  <i class="fa-solid fa-truck-moving"></i>
+                  <span>Fleet</span>
+                </a>
+              </li>
+              <li>
+                <a href="inventory.html">
+                  <i class="fa-solid fa-warehouse"></i>
+                  <span>Inventory</span>
+                </a>
+              </li>
+              <li>
+                <a href="income.html">
+                  <i class="fa-solid fa-sack-dollar"></i>
+                  <span>Order & Income</span>
+                </a>
+              </li>
+              <li>
+                <a href="reports.html">
+                  <i class="fa-solid fa-chart-pie"></i>
+                  <span>Reports</span>
+                </a>
+              </li>
+              <li>
+                <a href="invoices.html">
+                  <i class="fa-solid fa-file-invoice"></i>
+                  <span>Invoices</span>
+                </a>
+              </li>
+            <li>
+                <a href="create-shipment.html">
+                  <i class="fa-solid fa-plus-circle"></i>
+                  <span>Create Shipment</span>
+                </a>
+              </li>
+
+            <li>
+              <a href="analytics.html">
+                <i class="fa-solid fa-chart-line"></i>
+                <span>Cost Analysis (₹)</span>
+              </a>
+            </li>
+            <li>
+              <a href="wallet.html">
+                <i class="fa-solid fa-wallet"></i>
+                <span>Wallet</span>
+              </a>
+            </li>
+            <li>
+              <a href="settings.html">
+                <i class="fa-solid fa-gear"></i>
+                <span>Settings</span>
+              </a>
+            </li>
+          </ul>
+        </nav>
+        <div class="logout-section">
+            <a href="#">
+              <i class="fa-solid fa-right-from-bracket"></i>
+              <span>Logout</span>
+            </a>
+          </div>
+      </aside>
+
+      <!-- Main Content -->
+      <main class="main-content">
+        <!-- Header -->
+        <header class="top-bar">
+          <div class="toggle-btn" id="sidebar-toggle">
+            <i class="fa-solid fa-bars"></i>
+          </div>
+          <div class="search-bar">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" placeholder="Search shipment, order ID..." />
+          </div>
+          <div class="user-profile" onclick="window.location.href='settings.html'" style="cursor: pointer;" title="Go to Profile">
+            <div class="profile-info">
+              <img
+                src="https://ui-avatars.com/api/?name=Admin+User&background=0D8ABC&color=fff"
+                alt="User"
+              />
+              <div class="text">
+                <h4>Alex Morgan</h4>
+                <p>Admin</p>
+              </div>
+            </div>
+          </div>
+        </header>
+
+        <!-- Content Wrapper -->
+        <div class="content-wrapper">
+          
+           <!-- KYC Status Banner -->
+           <div id="kycBanner" class="kyc-banner hidden" style="background: #fff7ed; border: 1px solid #ffedd5; padding: 1rem; border-radius: 12px; margin-bottom: 2rem; display: flex; align-items: center; justify-content: space-between;">
+                <div style="display: flex; align-items: center; gap: 1rem;">
+                    <div style="background: #ffedd5; padding: 0.5rem; border-radius: 50%; color: #c2410c;">
+                        <i class="fa-solid fa-user-shield fa-lg"></i>
+                    </div>
+                    <div>
+                        <h4 style="color: #9a3412; margin-bottom: 0.2rem;">Complete Your KYC Verification</h4>
+                        <p style="color: #c2410c; font-size: 0.9rem;">Verify your identity to unlock international shipping and higher limits.</p>
+                    </div>
+                </div>
+                <button onclick="window.location.href='kyc.html'" class="btn-primary" style="background: #ea580c; border: none;">Verify Now</button>
+           </div>
+           
+           <div class="section-header" style="justify-content: space-between; display:flex; align-items: flex-end; margin-bottom: 2rem;">
+             <div>
+                  <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 0.5rem;">Welcome back to,</p>
+                  <h2 style="font-size: 1.8rem; font-weight: 700; color: var(--text-primary);">Logistics Dashboard</h2>
+             </div>
+             <div style="display: flex; gap: 2rem;">
+                  <div class="global-stat">
+                      <div class="icon"><i class="fa-solid fa-truck-ramp-box" style="color: #2563eb;"></i></div>
+                      <div>
+                          <h3 style="font-size: 1.2rem; font-weight: 700;">₹0 <i class="fa-solid fa-minus" style="font-size: 0.8rem; color: #9ca3af;"></i></h3>
+                          <p style="font-size: 0.8rem; color: var(--text-secondary);">Overall Imports</p>
+                      </div>
+                  </div>
+                  <div class="global-stat">
+                      <div class="icon"><i class="fa-solid fa-plane-departure" style="color: #2563eb;"></i></div>
+                      <div>
+                          <h3 style="font-size: 1.2rem; font-weight: 700;">₹0 <i class="fa-solid fa-minus" style="font-size: 0.8rem; color: #9ca3af;"></i></h3>
+                          <p style="font-size: 0.8rem; color: var(--text-secondary);">Overall Exports</p>
+                      </div>
+                  </div>
+             </div>
+           </div>
+
+          <!-- 8-Grid Stats -->
+          <div class="stats-grid-8">
+               <!-- Row 1 -->
+               <div class="stat-card-gradient blue">
+                  <div class="stat-content">
+                      <div class="icon-circle"><i class="fa-solid fa-truck"></i></div>
+                      <div>
+                          <p>Total Shipments</p>
+                          <h3 id="statTotalShipments">0</h3>
+                      </div>
+                  </div>
+                  <div class="card-bg-shape"></div>
+               </div>
+               
+               <div class="stat-card-gradient red">
+                  <div class="stat-content">
+                      <div class="icon-circle"><i class="fa-solid fa-clock"></i></div>
+                      <div>
+                          <p>Pending</p>
+                          <h3 id="statPending">0</h3>
+                      </div>
+                  </div>
+                  <div class="card-bg-shape"></div>
+               </div>
+
+               <div class="stat-card-gradient purple">
+                  <div class="stat-content">
+                      <div class="icon-circle"><i class="fa-solid fa-cart-shopping"></i></div>
+                      <div>
+                          <p>Delivered</p>
+                          <h3 id="statDelivered">0</h3>
+                      </div>
+                  </div>
+                  <div class="card-bg-shape"></div>
+               </div>
+
+               <div class="stat-card-gradient dark-blue">
+                  <div class="stat-content">
+                      <div class="icon-circle"><i class="fa-solid fa-cart-arrow-down"></i></div>
+                      <div>
+                          <p>Cancelled</p>
+                          <h3 id="statCancelled">0</h3>
+                      </div>
+                  </div>
+                  <div class="card-bg-shape"></div>
+               </div>
+
+               <!-- Row 2 -->
+               <div class="stat-card-gradient green">
+                  <div class="stat-content">
+                      <div class="icon-circle"><i class="fa-solid fa-plane"></i></div>
+                      <div>
+                          <p>In Transit</p>
+                          <h3 id="statInTransit">0</h3>
+                      </div>
+                  </div>
+                  <div class="card-bg-shape"></div>
+               </div>
+
+               <div class="stat-card-gradient orange">
+                  <div class="stat-content">
+                      <div class="icon-circle"><i class="fa-solid fa-rotate-left"></i></div>
+                      <div>
+                          <p>Returned</p>
+                          <h3 id="statReturned">0</h3>
+                      </div>
+                  </div>
+                  <div class="card-bg-shape"></div>
+               </div>
+
+               <div class="stat-card-gradient teal">
+                  <div class="stat-content">
+                      <div class="icon-circle"><i class="fa-solid fa-ban"></i></div>
+                      <div>
+                          <p>On Hold</p>
+                          <h3 id="statOnHold">0</h3>
+                      </div>
+                  </div>
+                  <div class="card-bg-shape"></div>
+               </div>
+
+               <div class="stat-card-gradient orange-red">
+                  <div class="stat-content">
+                      <div class="icon-circle"><i class="fa-solid fa-triangle-exclamation"></i></div>
+                      <div>
+                          <p>Failed</p>
+                          <h3 id="statFailed">0</h3>
+                      </div>
+                  </div>
+                  <div class="card-bg-shape"></div>
+               </div>
+          </div>
+
+          <!-- Middle Section Grid -->
+           <div class="middle-grid" style="display: grid; grid-template-columns: 1.5fr 1fr; gap: 2rem; margin-bottom: 2rem;">
+              
+              <!-- Left Column: Vehicle Status & Shipment Chart -->
+              <div style="display: flex; flex-direction: column; gap: 2rem;">
+                  
+                  <!-- Vehicle Status Bar -->
+                  <div class="card-white" style="padding: 1.5rem; border-radius: 12px; background: white; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);">
+                      <h3 style="margin-bottom: 1.5rem; font-size: 1.1rem;">Vehicle Status</h3>
+                      
+                      <!-- Progress Bar -->
+                      <div class="progress-multi">
+                          <div class="bar" style="width: 100%; background: #e5e7eb; color: #9ca3af; text-align: center;">No Data</div>
+                      </div>
+
+                       <div style="margin-top: 1.5rem; background: #f3f4f6; padding: 1rem; border-radius: 50px; display: flex; justify-content: space-between; align-items: center;">
+                            <div style="font-weight: 600;">February . 05 . Thursday</div>
+                            <div class="badge-blue">0 In Transit</div>
+                       </div>
+
+                       <!-- Mini List -->
+                        <div class="mini-vehicle-list" style="margin-top: 1rem; text-align: center; color: #9ca3af; padding: 1rem;">
+                            No active vehicles
+                        </div>
+                  </div>
+
+                  <!-- Shipment Statistics Chart -->
+                  <div class="chart-container" style="background: white; padding: 1.5rem; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);">
+                      <div class="section-header" style="margin-bottom: 1rem;">
+                          <h3>Shipment Statistics</h3>
+                      </div>
+                      <canvas id="shipmentStatsChart" style="height: 300px; width: 100%;"></canvas>
+                  </div>
+
+              </div>
+
+              <!-- Right Column: Orders by Country & Avg Delivery Time -->
+              <div style="display: flex; flex-direction: column; gap: 2rem;">
+                  
+                  <!-- Orders by Country / Timeline -->
+                  <div class="card-white" style="padding: 1.5rem; border-radius: 12px; background: white; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);">
+                       <h3 style="margin-bottom: 1.5rem; font-size: 1.1rem;">Orders by Country</h3>
+                       <div class="timeline-list">
+                           <div class="timeline-item" style="padding: 1rem; color: #9ca3af; justify-content: center;">
+                               No recent orders
+                           </div>
+                       </div>
+                  </div>
+
+                   <!-- Avg Delivery Time -->
+                  <div class="chart-container" style="background: white; padding: 1.5rem; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);">
+                       <div class="section-header" style="margin-bottom: 1rem;">
+                          <h3>Avg Delivery Time</h3>
+                      </div>
+                      <canvas id="avgDeliveryTimeChart" style="height: 200px; width: 100%;"></canvas>
+                  </div>
+
+              </div>
+           </div>
+
+           <!-- Vehicle List Table -->
+           <div class="table-section" style="background: white; padding: 1.5rem; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);">
+               <h3 style="margin-bottom: 1rem; color: var(--text-primary);">Vehicle List</h3>
+                <div class="table-responsive">
+                  <table id="vehicleListTable" class="styled-table">
+                    <thead>
+                      <tr style="background: #3b82f6; color: white;">
+                        <th>Vehicle ID</th>
+                        <th>Type</th>
+                        <th>Status</th>
+                        <th>Current Location</th>
+                        <th>Last Service Date</th>
+                        <th>Next Maintenance</th>
+                        <th>Driver Assigned</th>
+                      </tr>
+                    </thead>
+                    <tbody></tbody>
+                  </table>
+                </div>
+           </div>
+
+        </div>
+      </main>
+    </div>
+    <script src="dashboard.js"></script>
+  </body>
+</html>
+

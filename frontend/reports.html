@@ -1,0 +1,299 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <script>
+      if (!localStorage.getItem("token") || !localStorage.getItem("isLoggedIn")) {
+        window.location.href = "login.html";
+      }
+    </script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Reports & Analytics | LogiSir Dashboard</title>
+    <!-- Google Fonts -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <!-- Font Awesome -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="dashboard.css" />
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <style>
+        /* Special Effects Cards */
+        .report-card {
+            background: white;
+            border-radius: 16px;
+            padding: 1.5rem;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            display: flex; flex-direction: column; justify-content: space-between;
+            min-height: 140px;
+        }
+        .report-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1), 0 10px 10px -5px rgba(0,0,0,0.04);
+        }
+        
+        /* Gradients */
+        .card-gradient-1 { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; }
+        .card-gradient-2 { background: linear-gradient(135deg, #2af598 0%, #009efd 100%); color: white; }
+        .card-gradient-3 { background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 99%, #fecfef 100%); color: #333; }
+        .card-gradient-4 { background: linear-gradient(120deg, #f6d365 0%, #fda085 100%); color: white; }
+
+        .report-icon {
+            position: absolute;
+            right: -10px;
+            bottom: -10px;
+            font-size: 6rem;
+            opacity: 0.2;
+            transform: rotate(-15deg);
+        }
+
+        .metric-big { font-size: 2rem; font-weight: 700; margin: 0.5rem 0; }
+        .metric-sub { font-size: 0.9rem; opacity: 0.9; }
+
+        /* Chart Section */
+        .chart-box {
+            background: white; border-radius: 12px; padding: 1.5rem;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+            margin-bottom: 2rem;
+        }
+
+        /* Summary Stats Row */
+        .summary-row {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem; margin-bottom: 2rem;
+        }
+        .summary-item {
+            background: white; border-radius: 12px; padding: 1.5rem;
+            border-left: 4px solid #4f46e5;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        .summary-item h4 { color: #6b7280; font-size: 0.9rem; margin-bottom: 0.5rem; }
+        .summary-item .value { font-size: 1.5rem; font-weight: 700; color: #111827; }
+
+        /* Lists Section */
+        .lists-grid {
+            display: grid; grid-template-columns: 2fr 1fr; gap: 1.5rem;
+        }
+        @media (max-width: 1024px) { .lists-grid { grid-template-columns: 1fr; } }
+        
+        .list-box {
+            background: white; border-radius: 12px; padding: 1.5rem;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+            height: 100%;
+        }
+        .list-header { border-bottom: 1px solid #e5e7eb; padding-bottom: 1rem; margin-bottom: 1rem; display: flex; justify-content: space-between; align-items: center; }
+        
+        .notif-item { padding: 1rem 0; border-bottom: 1px solid #f3f4f6; display: flex; gap: 1rem; }
+        .notif-item:last-child { border-bottom: none; }
+        .notif-icon { width: 40px; height: 40px; border-radius: 50%; background: #e0e7ff; color: #4f46e5; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+        
+        .invoice-item { display: flex; justify-content: space-between; align-items: center; padding: 0.8rem 0; border-bottom: 1px solid #f3f4f6; }
+        .invoice-item:last-child { border-bottom: none; }
+    </style>
+  </head>
+  <body>
+    <div class="dashboard-container">
+      <!-- Sidebar -->
+      <aside class="sidebar">
+        <div class="logo">
+          <i class="fa-solid fa-truck-fast"></i>
+          <span>LogiSir</span>
+        </div>
+        <nav class="nav-menu">
+          <ul>
+            <li><a href="dashboard.html"><i class="fa-solid fa-house"></i><span>Dashboard</span></a></li>
+            <li><a href="kyc.html"><i class="fa-solid fa-id-card"></i><span>KYC Verification</span></a></li>
+            <li><a href="orders.html"><i class="fa-solid fa-clipboard-list"></i><span>Orders</span></a></li>
+            <li><a href="fleet.html"><i class="fa-solid fa-truck-moving"></i><span>Fleet</span></a></li>
+            <li><a href="inventory.html"><i class="fa-solid fa-warehouse"></i><span>Inventory</span></a></li>
+            <li><a href="income.html"><i class="fa-solid fa-sack-dollar"></i><span>Order & Income</span></a></li>
+            <li class="active">
+                <a href="reports.html">
+                  <i class="fa-solid fa-chart-pie"></i>
+                  <span>Reports</span>
+                </a>
+            </li>
+            <li>
+                <a href="invoices.html">
+                  <i class="fa-solid fa-file-invoice"></i>
+                  <span>Invoices</span>
+                </a>
+            </li>
+            <li><a href="create-shipment.html"><i class="fa-solid fa-plus-circle"></i><span>Create Shipment</span></a></li>
+            <li><a href="customers.html"><i class="fa-solid fa-users"></i><span>Customers</span></a></li>
+            <li><a href="analytics.html"><i class="fa-solid fa-chart-line"></i><span>Analytics</span></a></li>
+            <li><a href="wallet.html"><i class="fa-solid fa-wallet"></i><span>Wallet</span></a></li>
+            <li><a href="settings.html"><i class="fa-solid fa-gear"></i><span>Settings</span></a></li>
+          </ul>
+        </nav>
+        <div class="logout-section">
+          <a href="#"><i class="fa-solid fa-right-from-bracket"></i><span>Logout</span></a>
+        </div>
+      </aside>
+
+      <!-- Main Content -->
+      <main class="main-content">
+        <!-- Header -->
+        <header class="top-bar">
+          <div class="toggle-btn" id="sidebar-toggle"><i class="fa-solid fa-bars"></i></div>
+          <div class="search-bar">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" placeholder="Search reports..." />
+          </div>
+          <div class="user-profile">
+            <div class="profile-info">
+              <img src="https://ui-avatars.com/api/?name=Admin+User&background=0D8ABC&color=fff" alt="User" />
+              <div class="text">
+                <h4>Alex Morgan</h4>
+                <p>Admin</p>
+              </div>
+            </div>
+          </div>
+        </header>
+
+        <!-- Content -->
+        <div class="content-wrapper">
+             <div class="section-header" style="justify-content: space-between; display: flex;">
+                <div>
+                    <h2>Reports Overview</h2>
+                    <p>Detailed performance analytics and annual summaries.</p>
+                </div>
+                 <div style="display: flex; gap: 1rem; align-items: center;">
+                     <div class="global-stat">
+                          <div class="icon"><i class="fa-solid fa-truck-ramp-box" style="color: #2563eb;"></i></div>
+                          <div>
+                              <h3 style="font-size: 1.2rem; font-weight: 700;">₹0 <i class="fa-solid fa-minus" style="font-size: 0.8rem; color: #9ca3af;"></i></h3>
+                              <p style="font-size: 0.8rem; color: var(--text-secondary);">Overall Imports</p>
+                          </div>
+                     </div>
+                     <div class="global-stat">
+                          <div class="icon"><i class="fa-solid fa-plane-departure" style="color: #2563eb;"></i></div>
+                          <div>
+                              <h3 style="font-size: 1.2rem; font-weight: 700;">₹0 <i class="fa-solid fa-minus" style="font-size: 0.8rem; color: #9ca3af;"></i></h3>
+                              <p style="font-size: 0.8rem; color: var(--text-secondary);">Overall Exports</p>
+                          </div>
+                     </div>
+                </div>
+            </div>
+
+            <!-- Special Effects Grid -->
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.5rem; margin-bottom: 2rem;">
+                <div class="report-card card-gradient-1">
+                    <div>
+                        <h3>Products</h3>
+                        <div class="metric-big" id="repProducts">0</div>
+                        <p class="metric-sub">Total Active List</p>
+                    </div>
+                    <i class="fa-solid fa-box report-icon"></i>
+                </div>
+                <div class="report-card card-gradient-2">
+                    <div>
+                        <h3>Orders</h3>
+                        <div class="metric-big" id="repOrders">0</div>
+                         <p class="metric-sub">New this Month</p>
+                    </div>
+                    <i class="fa-solid fa-cart-shopping report-icon"></i>
+                </div>
+                <div class="report-card card-gradient-3">
+                    <div>
+                        <h3>Customers</h3>
+                        <div class="metric-big" id="repCustomers">0</div>
+                        <p class="metric-sub">Active Users</p>
+                    </div>
+                     <i class="fa-solid fa-users report-icon"></i>
+                </div>
+                <div class="report-card card-gradient-4">
+                    <div>
+                        <h3>Reviews</h3>
+                        <div class="metric-big" id="repReviews">0</div>
+                        <p class="metric-sub">Average Rating</p>
+                    </div>
+                    <i class="fa-solid fa-star report-icon"></i>
+                </div>
+            </div>
+
+            <!-- Yearly Sales Chart -->
+            <div class="chart-box">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
+                    <h3>Yearly Sales Performance</h3>
+                    <select style="border:1px solid #e5e7eb; padding:0.5rem; border-radius:6px;">
+                        <option>2026</option>
+                        <option>2025</option>
+                    </select>
+                </div>
+                <canvas id="yearlySalesChart" style="max-height: 350px;"></canvas>
+            </div>
+
+            <!-- Summary Stats -->
+            <div class="summary-row">
+                <div class="summary-item" style="border-color: #4f46e5;">
+                    <h4>Total Orders (Year)</h4>
+                    <div class="value" id="repTotalOrders">0</div>
+                </div>
+                 <div class="summary-item" style="border-color: #10b981;">
+                    <h4>Total Sales (Year)</h4>
+                    <div class="value" id="repTotalSales">0</div>
+                </div>
+                 <div class="summary-item" style="border-color: #f59e0b;">
+                    <h4>Total Profit</h4>
+                    <div class="value" id="repTotalProfit">0</div>
+                </div>
+                 <div class="summary-item" style="border-color: #ec4899;">
+                    <h4>Total Revenue</h4>
+                    <div class="value" id="repTotalRevenue">0</div>
+                </div>
+            </div>
+
+            <!-- Lists Grid -->
+            <div class="lists-grid">
+                <!-- Order History Table -->
+                <div class="list-box">
+                    <div class="list-header">
+                        <h3>Order History</h3>
+                        <a href="#" style="font-size:0.9rem; color:#4f46e5;">View All</a>
+                    </div>
+                    <div class="table-responsive">
+                        <table id="repOrderTable" style="width:100%;">
+                            <thead>
+                                <tr style="text-align:left; color:#6b7280; font-size:0.9rem;">
+                                    <th style="padding-bottom:1rem;">ID</th>
+                                    <th style="padding-bottom:1rem;">Customer</th>
+                                    <th style="padding-bottom:1rem;">Amount</th>
+                                    <th style="padding-bottom:1rem;">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Notifications & Invoices -->
+                <div style="display:flex; flex-direction:column; gap:1.5rem;">
+                    <!-- Invoices -->
+                     <div class="list-box" style="flex:1;">
+                        <div class="list-header">
+                            <h3>Invoices</h3>
+                             <a href="#" style="font-size:0.9rem; color:#4f46e5;"><i class="fa-solid fa-plus"></i></a>
+                        </div>
+                        <div id="repInvoicesList"></div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+      </main>
+    </div>
+    <script src="dashboard.js"></script>
+  </body>
+</html>
+
